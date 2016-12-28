@@ -285,11 +285,147 @@ grid.arrange(w3,w4)
 
 
 #################################################
-# 
+# Workday alcohol consumption and grades
 #################################################
 
+#Maths Students 
+g1 <- ggplot(mathData, aes(x=Dalc, y=G1, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("First Grade")
+
+g2 <- ggplot(mathData, aes(x=Dalc, y=G2, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("Second Grade")
+
+g3 <- ggplot(mathData, aes(x=Dalc, y=G3, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("Final Grade")
+
+grid.arrange(g1,g2,g3,ncol=3)
+
+#Portuguese Students
+h1 <- ggplot(porData, aes(x=Dalc, y=G1, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("First Grade")
+
+h2 <- ggplot(porData, aes(x=Dalc, y=G2, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("Second Grade")
+
+h3 <- ggplot(porData, aes(x=Dalc, y=G3, fill=Dalc))+
+  geom_boxplot()+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Alcohol consumption")+
+  ylab("Grade")+
+  ggtitle("Final Grade")
+
+grid.arrange(h1,h2,h3,ncol=3)
+
+#################################################
+# Histogram to see weekly Study time of students
+#################################################
+
+#Maths class
+hist(mathData$studytime, main = "Study Time (Maths Class)",
+     xlab = "Weekly Studytime \nnumeric:1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours",
+     xlim=c(0,10))
+
+#Portuguese class
+hist(porData$studytime, main = "Study Time (Portuguese Class)",
+     xlab = "Weekly Studytime \nnumeric:1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours",
+     xlim=c(0,10))
+
+#################################################
+# Plot to see grades and weekly Study time of students
+#################################################
+
+mathData$studytime <- as.factor(mathData$studytime)      
+mathData$studytime <- mapvalues(mathData$studytime, 
+                       from = 1:4, 
+                       to = c(" < 2 ", "2 - 5", "5 - 10", " > 10"))
+
+porData$studytime <- as.factor(porData$studytime)      
+porData$studytime <- mapvalues(porData$studytime, 
+                                from = 1:4, 
+                                to = c(" < 2 ", "2 - 5", "5 - 10", " > 10"))
 
 
+#Maths Students
+s1 <- ggplot(mathData, aes(x=studytime, y=G1, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("First Grade")
+
+s2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("Second Grade")
+
+s3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("Final Grade")
+
+grid.arrange(s1,s2,s3,ncol=3)
+
+#Portuguese Students
+t1 <- ggplot(mathData, aes(x=studytime, y=G1, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("First Grade")
+
+t2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("Second Grade")
+
+t3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
+  geom_boxplot(aes(fill=factor(studytime)))+
+  theme_bw()+
+  theme(legend.position="none")+
+  xlab("Weekly Studytime (in hours)")+
+  ylab("Grade")+
+  ggtitle("Final Grade")
+
+grid.arrange(t1,t2,t3,ncol=3)
 
 
 #################################################
