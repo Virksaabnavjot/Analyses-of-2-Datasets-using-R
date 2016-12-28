@@ -55,7 +55,10 @@ head(mathData, 2)
 #Display the number of attributes in the dataset (i.e no. of columns)
 length(mathData)
 
+#################################################
 #TESTING - Playing around with math students data
+#################################################
+
 #The below subset the data and shows school,sex and age
 mathData[1:3]
 #The line below subsets and display the data in row 1 and column 3, which is 18
@@ -66,8 +69,25 @@ summary(mathData$sex)
 #(GP - 349 and MS - 46)
 summary(mathData[ ,1])  # or summary(mathData$school)
 
+#################################################
 #End of TESTING
+#################################################
 
+
+#Subset data where daily drinking exceeds from medium - 3 to 
+#very high alcohol consumption - 5
+#In maths class
+high.drinking.math <- subset(mathData, Dalc > 3)
+high.drinking.math
+#In portuguese class
+high.drinking.por <- subset(porData, Dalc > 3)
+high.drinking.por
+dim(high.drinking.math)
+dim(high.drinking.por)
+
+#################################################
+#Helpful Plots
+################################################
 
 #Drawing a plot to see which school has the most students in maths class (GP or MS)
 plot(x=mathData$school, y=mathData$school)
@@ -82,24 +102,16 @@ plot(x=mathData$sex, y=mathData$age)
 #In portugues class and  
 plot(x=porData$sex, y=porData$age)
 
-######################################################################################
-
-
-#Subset data where daily drinking exceeds from medium - 3 to 
-#very high alcohol consumption - 5
-#In maths class
-high.drinking.math <- subset(mathData, Dalc > 3)
-high.drinking.math
-#In portuguese class
-high.drinking.por <- subset(porData, Dalc > 3)
-high.drinking.por
-dim(high.drinking.math)
-dim(high.drinking.por)
-
 
 #################################################
-#Maths Class
+#Maths Class Plots
 #################################################
+
+
+mathData$Dalc <- as.factor(mathData$Dalc)      
+mathData$Dalc <- mapvalues(mathData$Dalc, 
+                           from = 1:5, 
+                           to = c("Very Low", "Low", "Medium", "High", "Very High"))
 
 mathData$Walc <- as.factor(mathData$Walc)      
 mathData$Walc <- mapvalues(mathData$Walc, 
@@ -129,11 +141,32 @@ plotWA <- ggplot(mathData, aes(age, Walc, fill = Walc))+
 ggplotly(plotWA)
 
 ####Working bit above
+barplot(table(mathData$Dalc), ylab='Number of Students', xlab='Weekend Alcohol',
+        main ='Workday Alcohol Consumption (Maths Class) ',
+        col=rainbow(7))
+
+ggplot(mathData, aes(x=Dalc, y=absences, fill=Dalc, color = Dalc))+
+  geom_jitter(alpha=0.7)+
+  theme_bw()+
+  ggtitle("School Absences distribution per Workday alcohol consumption")+
+  xlab("Workday Alcohol consumption")+
+  ylab("Number of school absences")
+
+ggplot(mathData, aes(x=Walc, y=absences, fill=Walc, color = Walc))+
+  geom_jitter(alpha=0.7)+
+  theme_bw()+
+  ggtitle("School Absences distribution per Weekend alcohol consumption")+
+  xlab("Weekend Alcohol consumption")+
+  ylab("No. of absences")
 
 
-
-
-
+ggplot(mathData, aes(x=Walc, y=school, color=sex))+
+  geom_jitter(alpha=0.7)+
+  scale_colour_manual(values=c("#ff7f50", "#468499"))+
+  theme_bw()+
+  xlab("Weekend alcohol consumption")+
+  ylab("School")+
+  ggtitle("Weekend alcohol consumption per school and sex")
 
 
 
