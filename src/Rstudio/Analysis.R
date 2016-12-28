@@ -1,14 +1,14 @@
 install.packages(c("e1071", "C50", "ggplot2", "hexbin","descr", "caret", "e1071", "plotly"))
 library(e1071)
-library(waffle)
 library(hexbin)
 library(ggplot2)
+library(waffle)
 library(plotly)
 library(caret)
 library(descr)
 library(C50)
-library(zoo)
 library(plyr)
+library(gridExtra)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
@@ -41,19 +41,21 @@ names(porData)
 #Display the structure of R object, summary and view data
 str(mathData)
 summary(mathData)
-View(mathData)
+#View(mathData)
 
 #Display the average age of students in each dataset
 median(mathData$age)
 median(porData$age)
 
-#Display the number of rows and colums in dataset
+#Display the number of rows and colums in datasets
 dim(mathData)
+dim(porData)
 #Display the first 2 rows just to see the data
 head(mathData, 2)
 
 #Display the number of attributes in the dataset (i.e no. of columns)
 length(mathData)
+length(porData)
 
 #################################################
 #TESTING - Playing around with math students data
@@ -104,10 +106,11 @@ plot(x=porData$sex, y=porData$age)
 
 
 #################################################
-#Maths Class Plots
+# Plots
 #################################################
 
-
+#USING workday and weekend alcohol cnsumption as factors
+#and mapping to a range form very low to very high consumption level
 mathData$Dalc <- as.factor(mathData$Dalc)      
 mathData$Dalc <- mapvalues(mathData$Dalc, 
                            from = 1:5, 
@@ -119,12 +122,41 @@ mathData$Walc <- mapvalues(mathData$Walc,
                            to = c("Very Low", "Low", "Medium", "High", "Very High"))
 
 
-# Weekly alcohol consumption and guardian's
-plotWG <- ggplot(mathData, aes(guardian,Walc, fill = guardian)) +
+porData$Dalc <- as.factor(porData$Dalc)      
+porData$Dalc <- mapvalues(porData$Dalc, 
+                           from = 1:5, 
+                           to = c("Very Low", "Low", "Medium", "High", "Very High"))
+
+porData$Walc <- as.factor(porData$Walc)      
+porData$Walc <- mapvalues(porData$Walc, 
+                           from = 1:5, 
+                           to = c("Very Low", "Low", "Medium", "High", "Very High"))
+
+#################################################
+# Plots # Weekly alcohol consumption as per guardian
+#################################################
+
+#Maths Class
+plotWGMath <- ggplot(mathData, aes(guardian,Walc, fill = guardian)) +
   geom_boxplot()+
   ggtitle("Weekend alcohol consumption as per guardian's")
 
-ggplotly(plotWG)
+ggplotly(plotWGMath)  #Result - Draw plot
+
+# In Portuguese language class
+plotWGPor <- ggplot(porData, aes(guardian,Walc, fill = guardian)) +
+  geom_boxplot()+
+  ggtitle("Weekend alcohol consumption as per guardian's")
+
+ggplotly(plotWGPor) #Result - Draw plot
+
+#Comparision b/w classes
+subplot(plotWGMath, plotWGPor, nrows = 2)  #Result - Draw plot
+
+
+#################################################
+# Plot # Weekend Alcohol consumption as per Gender
+#################################################
 
 plotWS <- ggplot(mathData, aes(sex, Walc, fill = sex))+
   geom_boxplot()+
@@ -132,45 +164,138 @@ plotWS <- ggplot(mathData, aes(sex, Walc, fill = sex))+
 
 ggplotly(plotWS)
 
+#################################################
+# Plot # Weekend Alchol Consumption based on age of student
+#################################################
 
-### Weekend Alchol Consumption based on age of student in maths class
-plotWA <- ggplot(mathData, aes(age, Walc, fill = Walc))+
+#In Maths Class
+plotWAMath <- ggplot(mathData, aes(age, Walc, fill = Walc))+
   geom_boxplot(aes(fill=factor(age)))+
-  ggtitle("Weekend Alcohol consumption as per age. \nin Maths Class")
+  ggtitle("Weekend Alcohol consumption as per age")
 
-ggplotly(plotWA)
+ggplotly(plotWAMath)
 
-####Working bit above
+#In Portuguese language class
+plotWAPor <- ggplot(porData, aes(age, Walc, fill = Walc))+
+  geom_boxplot(aes(fill=factor(age)))+
+  ggtitle("Weekend Alcohol consumption as per age")
+
+ggplotly(plotWAPor)
+
+#################################################
+# Barplot # Weekday Consumption and no. of students
+#################################################
+
+#Maths Class
 barplot(table(mathData$Dalc), ylab='Number of Students', xlab='Weekend Alcohol',
         main ='Workday Alcohol Consumption (Maths Class) ',
         col=rainbow(7))
 
-ggplot(mathData, aes(x=Dalc, y=absences, fill=Dalc, color = Dalc))+
+barplot(table(porData$Dalc), ylab='Number of Students', xlab='Weekend Alcohol',
+        main ='Workday Alcohol Consumption (Por Class) ',
+        col=rainbow(7))
+
+#################################################
+# School Absences distribution per Workday alcohol consumption
+# Maths Class
+#################################################
+
+m1 <- ggplot(mathData, aes(x=Dalc, y=absences, fill=Dalc, color = Dalc))+
+  geom_jitter(alpha=0.7)+
+  scale_colour_manual(values=c("#ff33ff", "#00ffff", "#468499", "#ff7f50", "#0000cc"))+
+  theme_bw()+
+  ggtitle("School Absences distribution per Workday alcohol consumption")+
+  xlab("Workday Alcohol consumption (Maths Class)")+
+  ylab("Number of school absences")
+
+m2 <- ggplot(mathData, aes(x=Walc, y=absences, fill=Walc, color = Walc))+
+  geom_jitter(alpha=0.7)+
+  theme_bw()+
+  scale_colour_manual(values=c("#ff33ff", "#00ffff", "#468499", "#ff7f50", "#0000cc"))+
+  ggtitle("School Absences distribution per Weekend alcohol consumption")+
+  xlab("Weekend Alcohol consumption (Maths Class)")+
+  ylab("No. of absences")
+
+grid.arrange(m1,m2) #Plots Results comparision
+
+#################################################
+# School Absences distribution per Workday alcohol consumption
+# Portuguese Subject Class
+#################################################
+
+p1 <- ggplot(porData, aes(x=Dalc, y=absences, fill=Dalc, color = Dalc))+
   geom_jitter(alpha=0.7)+
   theme_bw()+
   ggtitle("School Absences distribution per Workday alcohol consumption")+
-  xlab("Workday Alcohol consumption")+
+  xlab("Workday Alcohol consumption (Portuguese Class)")+
   ylab("Number of school absences")
 
-ggplot(mathData, aes(x=Walc, y=absences, fill=Walc, color = Walc))+
+p2 <- ggplot(porData, aes(x=Walc, y=absences, fill=Walc, color = Walc))+
   geom_jitter(alpha=0.7)+
   theme_bw()+
   ggtitle("School Absences distribution per Weekend alcohol consumption")+
-  xlab("Weekend Alcohol consumption")+
+  xlab("Weekend Alcohol consumption (Portuguese Class)")+
   ylab("No. of absences")
 
+grid.arrange(p1,p2) #Plots Results comparision
 
-ggplot(mathData, aes(x=Walc, y=school, color=sex))+
+#################################################
+# Alcohol consumption per school and sex
+#################################################
+
+# Weekend Comsumption (Maths Student)
+w1 <- ggplot(mathData, aes(x=Walc, y=school, color=sex))+
   geom_jitter(alpha=0.7)+
-  scale_colour_manual(values=c("#ff7f50", "#468499"))+
+  scale_colour_manual(values=c("#ff33ff", "#00cc00"))+
   theme_bw()+
-  xlab("Weekend alcohol consumption")+
+  xlab("Weekend alcohol consumption (Maths Class)")+
   ylab("School")+
   ggtitle("Weekend alcohol consumption per school and sex")
 
+# Workday Comsumption (Maths Student)
+w2 <- ggplot(mathData, aes(x=Dalc, y=school, color=sex))+
+  geom_jitter(alpha=0.7)+
+  scale_colour_manual(values=c("#ff33ff", "#00cc00"))+
+  theme_bw()+
+  xlab("Workday alcohol consumption (Maths Class)")+
+  ylab("School")+
+  ggtitle("Workday alcohol consumption per school and sex")
+
+grid.arrange(w1,w2)
+
+# Weekend Comsumption (Portuguese Student)
+w3 <- ggplot(porData, aes(x=Walc, y=school, color=sex))+
+  geom_jitter(alpha=0.7)+
+  scale_colour_manual(values=c("#ff33ff", "#0000ff"))+
+  theme_bw()+
+  xlab("Weekend alcohol consumption (Portuguese Class)")+
+  ylab("School")+
+  ggtitle("Weekend alcohol consumption per school and sex")
+
+# Workday Comsumption (Portuguese Student)
+w4 <- ggplot(porData, aes(x=Dalc, y=school, color=sex))+
+  geom_jitter(alpha=0.7)+
+  scale_colour_manual(values=c("#ff33ff", "#0000ff"))+
+  theme_bw()+
+  xlab("Workday alcohol consumption (Portuguese Class)")+
+  ylab("School")+
+  ggtitle("Workday alcohol consumption per school and sex")
+
+grid.arrange(w3,w4)
 
 
-#References
+#################################################
+# 
+#################################################
+
+
+
+
+
+#################################################
+# References
+#################################################
+
 #Loading Data and Working With Data Frames: https://www.youtube.com/watch?v=qK1ElUMkhq0
 #UCI Kaggel: https://www.kaggle.com/uciml/student-alcohol-consumption/
 #Add horizontal lines to whiskers using ggplot2: https://plot.ly/ggplot2/box-plots/
@@ -179,7 +304,8 @@ ggplot(mathData, aes(x=Walc, y=school, color=sex))+
 #Add color to boxplot - “Continuous value supplied to discrete scale” error: http://stackoverflow.com/questions/10805643/add-color-to-boxplot-continuous-value-supplied-to-discrete-scale-error
 #Student Alcohol Consumption: https://rpubs.com/Ndee/student-alcohol
 #Kaggle: https://www.kaggle.com/marcdeveaux/d/uciml/student-alcohol-consumption/student-alcohol-consumption/code
-
-
+#Arranging multiple grobs on a page: https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html
+#Error: could not find function "grid.arrange" :http://stackoverflow.com/questions/32826957/errors-using-multi-plot-ggplot2-and-grid-arrange-gridextra
+#Html Color Picker: http://www.w3schools.com/colors/colors_picker.asp
 
 
