@@ -171,5 +171,15 @@ ggplot(mathData, aes(x=Walc, y=school, color=sex))+
 
 
 #References
-#https://www.youtube.com/watch?v=qK1ElUMkhq0
+#Loading Data and Working With Data Frames: https://www.youtube.com/watch?v=qK1ElUMkhq0
+#UCI Kaggel: https://www.kaggle.com/uciml/student-alcohol-consumption/
+#Add horizontal lines to whiskers using ggplot2: https://plot.ly/ggplot2/box-plots/
+#Using plyr::mapvalues with dplyr: http://stackoverflow.com/questions/28013652/using-plyrmapvalues-with-dplyr
+#Error: stat_count() must not be used with a y aesthetic: https://github.com/tidyverse/ggplot2/issues/1415
+#Add color to boxplot - “Continuous value supplied to discrete scale” error: http://stackoverflow.com/questions/10805643/add-color-to-boxplot-continuous-value-supplied-to-discrete-scale-error
+#Student Alcohol Consumption: https://rpubs.com/Ndee/student-alcohol
+#Kaggle: https://www.kaggle.com/marcdeveaux/d/uciml/student-alcohol-consumption/student-alcohol-consumption/code
+
+
+
 
