@@ -12,6 +12,10 @@ library(gridExtra)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
+#File Content :Analysis of data from both datasets individualy and 
+# a comparision of the results
+
+#Lets get started ...
 
 #Getting the current working directory
 getwd()
@@ -438,19 +442,6 @@ grid.arrange(t1,t2,t3,ncol=3)
 
 
 #################################################
-# Joining both datasets together
-#################################################
-mathData <- read.csv("student-mat.csv",sep=";",header=TRUE)
-porData <- read.csv("student-por.csv",sep=";",header=TRUE)
-
-#Saving all the data in combinedData dataframe
-combinedData <- rbind(mathData,porData)
-
-View(combinedData)
-
-
-
-#################################################
 # References
 #################################################
 
@@ -466,4 +457,4 @@ View(combinedData)
 #Error: could not find function "grid.arrange" :http://stackoverflow.com/questions/32826957/errors-using-multi-plot-ggplot2-and-grid-arrange-gridextra
 #Html Color Picker: http://www.w3schools.com/colors/colors_picker.asp
 #Plotly for R: https://cpsievert.github.io/plotly_book/boxplots.html
-
+#Invalid factor level, NA generated:http://stackoverflow.com/questions/16819956/invalid-factor-level-na-generated
