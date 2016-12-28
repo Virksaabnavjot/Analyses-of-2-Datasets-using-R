@@ -92,10 +92,16 @@ dim(high.drinking.por)
 ################################################
 
 #Drawing a plot to see which school has the most students in maths class (GP or MS)
-plot(x=mathData$school, y=mathData$school)
-#Drawing a plot to see which school has the most students in portuguese class 
-plot(x=porData$school, y=porData$school)
+p1 <- plot_ly(mathData, x = ~school) %>% add_histogram()
 
+#Drawing a plot to see which school has the most students in portuguese class (GP or MS)
+q2 <- porData %>%
+  dplyr::count(school) %>%
+  plot_ly(x = ~school, y = ~n) %>% 
+  add_bars()
+
+subplot(p1, q2) %>% hide_legend() # Results
+#Reference: https://cpsievert.github.io/plotly_book/bars-histograms.html
 
 #Drawing a plot to see male and female students in both subject and their age range
 #and the average age i.e 17 for females and 16 for male students in portugues class
@@ -356,6 +362,9 @@ hist(porData$studytime, main = "Study Time (Portuguese Class)",
      xlab = "Weekly Studytime \nnumeric:1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours",
      xlim=c(0,10))
 
+
+
+
 #################################################
 # Plot to see grades and weekly Study time of students
 #################################################
@@ -429,6 +438,19 @@ grid.arrange(t1,t2,t3,ncol=3)
 
 
 #################################################
+# Joining both datasets together
+#################################################
+mathData <- read.csv("student-mat.csv",sep=";",header=TRUE)
+porData <- read.csv("student-por.csv",sep=";",header=TRUE)
+
+#Saving all the data in combinedData dataframe
+combinedData <- rbind(mathData,porData)
+
+View(combinedData)
+
+
+
+#################################################
 # References
 #################################################
 
@@ -443,5 +465,5 @@ grid.arrange(t1,t2,t3,ncol=3)
 #Arranging multiple grobs on a page: https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html
 #Error: could not find function "grid.arrange" :http://stackoverflow.com/questions/32826957/errors-using-multi-plot-ggplot2-and-grid-arrange-gridextra
 #Html Color Picker: http://www.w3schools.com/colors/colors_picker.asp
-
+#Plotly for R: https://cpsievert.github.io/plotly_book/boxplots.html
 
