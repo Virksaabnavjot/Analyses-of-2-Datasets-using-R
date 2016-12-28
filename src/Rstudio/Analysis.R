@@ -1,11 +1,14 @@
-install.packages(c("e1071", "C50", "ggplot2", "hexbin","descr", "caret", "e1071"))
+install.packages(c("e1071", "C50", "ggplot2", "hexbin","descr", "caret", "e1071", "plotly"))
 library(e1071)
+library(waffle)
 library(hexbin)
 library(ggplot2)
+library(plotly)
 library(caret)
 library(descr)
 library(C50)
 library(zoo)
+library(plyr)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
@@ -93,8 +96,47 @@ high.drinking.por
 dim(high.drinking.math)
 dim(high.drinking.por)
 
+
+#################################################
+#Maths Class
+#################################################
+
+mathData$Walc <- as.factor(mathData$Walc)      
+mathData$Walc <- mapvalues(mathData$Walc, 
+                           from = 1:5, 
+                           to = c("Very Low", "Low", "Medium", "High", "Very High"))
+
+
+# Weekly alcohol consumption and guardian's
+plotWG <- ggplot(mathData, aes(guardian,Walc, fill = guardian)) +
+  geom_boxplot()+
+  ggtitle("Weekend alcohol consumption as per guardian's")
+
+ggplotly(plotWG)
+
+plotWS <- ggplot(mathData, aes(sex, Walc, fill = sex))+
+  geom_boxplot()+
+  ggtitle("Weekend Alcohol consumption as per Gender")
+
+ggplotly(plotWS)
+
+
+### Weekend Alchol Consumption based on age of student in maths class
+plotWA <- ggplot(mathData, aes(age, Walc, fill = Walc))+
+  geom_boxplot(aes(fill=factor(age)))+
+  ggtitle("Weekend Alcohol consumption as per age. \nin Maths Class")
+
+ggplotly(plotWA)
+
+####Working bit above
+
+
+
+
+
+
+
+
 #References
 #https://www.youtube.com/watch?v=qK1ElUMkhq0
-
-
 
