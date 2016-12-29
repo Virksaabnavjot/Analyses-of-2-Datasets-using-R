@@ -9,6 +9,7 @@ library(descr)
 library(C50)
 library(plyr)
 library(gridExtra)
+library(reshape2)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
@@ -79,10 +80,18 @@ ggplotly(plot)
 
 plot(x=mathData$sex, y=mathData$age)
 
-
-ggplot(combinedData, aes(famrel, Walc, fill = sex))+
-  geom_boxplot()+
+#################################################
+# Plot # Weekend & Workday Alcohol consumption as per family relations
+#################################################
+s1 <- ggplot(combinedData, aes(famrel, Walc, fill = sex))+
+  geom_polygon()+
   ggtitle("Combined Results \nWeekend Alcohol consumption as per Family Relations")
+
+s2 <- ggplot(combinedData, aes(famrel, Dalc, fill = sex))+
+  geom_polygon()+
+  ggtitle("Combined Results \nWorkday Alcohol consumption as per Family Relations")
+
+grid.arrange(s1,s2)
 #################################################
 # Plot # Weekend & Workday Alcohol consumption as per Gender
 #################################################
@@ -97,15 +106,43 @@ p2 <- ggplot(combinedData, aes(sex, Dalc, fill = sex))+
 
 grid.arrange(p1,p2)
 
+#################################################
+# Plot # Workday Alcohol Consumption 
+#################################################
 
-# Workday Alcohol Consumption (Combined)
 plot(combinedData$Dalc, ylab='(Combined dataset) Workday Alcohol Consumption', type="o", col="blue", ylim=c(0,7))
 
-j1 <- ggplot(combinedData$activities)
-j2 <- ggplot(combinedData$internet)
-
-subplot(j1,j2)
-
+#################################################
+# Plot # Plotting Activities and Internet availability
+#################################################
+ 
 m1 <- melt(combinedData, measure.vars=c("internet","activities"))
 qplot(variable, data=m1, fill=value) + facet_wrap( facets= ~variable, scale="free_x")
+#Reference: http://stackoverflow.com/questions/18819274/how-do-i-plot-a-number-of-categorical-variables-on-a-graph-in-r
+
+#################################################
+# Plot # Intrested to take Higher Education and alcohol consumption
+#################################################
+
+ggplot(combinedData,aes(higher,Dalc))+
+  geom_violin()+coord_flip()+
+  xlab("Intrested in higher education")+
+  ylab("Workday Alcohol Consumption")+
+  ggtitle(" Distribution of Alcohol Consumption Given Desire for Higher Education")
+#Reference: https://www.kaggle.com/interkf/d/uciml/student-alcohol-consumption/alcohol-consumption-from-portuguese-school
+
+#################################################
+# Plot # Workday alcohol consumption per age
+#################################################
+
+ggplot(porData, aes(x=age, fill=Dalc))+
+  geom_histogram(binwidth=1, colour="white",aes(fill=factor(age)))+
+  facet_grid(~Dalc)+
+  theme_bw()+
+  theme(legend.position="none")+
+  ggtitle("Combined Data results on \nWorkday alcohol consumption per age")+
+  xlab("Student's age") 
+#Reference: https://www.kaggle.com/marcdeveaux/d/uciml/student-alcohol-consumption/student-alcohol-consumption/comments
+
+
 
