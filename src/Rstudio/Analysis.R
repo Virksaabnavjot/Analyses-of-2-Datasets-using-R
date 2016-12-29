@@ -12,6 +12,8 @@ library(gridExtra)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
+#
+#FILE 1
 #File Content :Analysis of data from both datasets individualy and 
 # a comparision of the results
 
@@ -439,6 +441,14 @@ t3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
   ggtitle("Final Grade")
 
 grid.arrange(t1,t2,t3,ncol=3)
+
+#################################################
+#Analysis to be continued in combinedAnalysis.R file
+
+
+
+
+
 
 
 #################################################
