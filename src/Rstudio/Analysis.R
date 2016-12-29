@@ -71,8 +71,9 @@ length(porData)
 mathData[1:3]
 #The line below subsets and display the data in row 1 and column 3, which is 18
 mathData[1,3]
-#The line below displays the number of girls and boys i.e (male,female)
+#The line below displays the number of girls and boys i.e (male,female) in each dataset
 summary(mathData$sex) 
+summary(porData$sex)
 #Another way -The line below displays the number of students in each school
 #(GP - 349 and MS - 46)
 summary(mathData[ ,1])  # or summary(mathData$school)
@@ -82,13 +83,15 @@ summary(mathData[ ,1])  # or summary(mathData$school)
 #################################################
 
 
-#Subset data where daily drinking exceeds from medium - 3 to 
+#Subset data where weekend alcohol consumption exceeds from medium - 3 to 
 #very high alcohol consumption - 5
 #In maths class
-high.drinking.math <- subset(mathData, Dalc > 3)
+high.drinking.math <- subset(mathData, Walc > 3)
 high.drinking.math
+summary(high.drinking.math)
+
 #In portuguese class
-high.drinking.por <- subset(porData, Dalc > 3)
+high.drinking.por <- subset(porData, Walc > 3)
 high.drinking.por
 dim(high.drinking.math)
 dim(high.drinking.por)

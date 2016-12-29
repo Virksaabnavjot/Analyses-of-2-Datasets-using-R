@@ -73,7 +73,7 @@ ggplotly(plot)
 
 plot<- ggplot(combinedData, aes(age, Dalc, fill = Dalc))+
   geom_boxplot(aes(fill=factor(age)))+
-  ggtitle("(Combined Results) \nWeekend Alcohol consumption as per age")
+  ggtitle("(Combined Results) \nWorkday Alcohol consumption as per age")
 
 ggplotly(plot)
 
