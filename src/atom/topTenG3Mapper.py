@@ -14,10 +14,6 @@ import sys
 # Initialise a list to store the top N records as a collection of touples (g3, record)
 myList = []
 n = 10	# Number of top N records
-
-
-
-
 for line in sys.stdin:
 	# remove leading and trailing whitespace
 	line = line.strip()
@@ -32,7 +28,7 @@ for line in sys.stdin:
 		continue
 
 	# add (g3, record) touple to list
-	myList.append( (g3, line) )
+	myList.append( (g3,line) )
 	# sort list in reverse order
 	myList.sort(reverse=True)
 
