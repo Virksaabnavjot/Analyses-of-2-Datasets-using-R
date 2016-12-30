@@ -12,10 +12,14 @@ library(gridExtra)
 
 #Author: Navjot Singh Virk
 #Student Number: x13112406
+#Email: virksaabnavjot@gmail.com
+#Github: https://github.com/Virksaabnavjot/Analyses-of-2-Datasets-using-R
+#Website: https://navsingh.org.uk
 #
-#FILE 1
-#File Content :Analysis of data from both datasets individualy and 
-# a comparision of the results
+#Datasets: Student Alcohol Consumption datasets on maths and portuguese language class students
+#Dataset Source: https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION
+#FILE 1 (Analysis.R)
+#File Content :Analysis of data from 2 datasets individualy and a comparision of the results
 
 #Lets get started ...
 
@@ -77,7 +81,7 @@ summary(porData$sex)
 #Another way -The line below displays the number of students in each school
 #(GP - 349 and MS - 46)
 summary(mathData[ ,1])  # or summary(mathData$school)
-
+summary(porData[ ,1])
 #################################################
 #End of TESTING
 #################################################
@@ -102,7 +106,7 @@ dim(high.drinking.por)
 
 #Drawing a plot to see which school has the most students in maths class (GP or MS)
 p1 <- plot_ly(mathData, x = ~school) %>% add_histogram()
-
+plot_ly(porData, x = ~school) %>% add_histogram()
 #Drawing a plot to see which school has the most students in portuguese class (GP or MS)
 q2 <- porData %>%
   dplyr::count(school) %>%
@@ -118,7 +122,6 @@ subplot(p1, q2) %>% hide_legend() # Results
 plot(x=mathData$sex, y=mathData$age)
 #In portugues class and  
 plot(x=porData$sex, y=porData$age)
-
 
 #################################################
 # Plots
@@ -154,14 +157,14 @@ porData$Walc <- mapvalues(porData$Walc,
 #Maths Class
 plotWGMath <- ggplot(mathData, aes(guardian,Walc, fill = guardian)) +
   geom_boxplot()+
-  ggtitle("Weekend alcohol consumption as per guardian's")
+  ggtitle("Weekend alcohol consumption and guardian")
 
 ggplotly(plotWGMath)  #Result - Draw plot
 
 # In Portuguese language class
 plotWGPor <- ggplot(porData, aes(guardian,Walc, fill = guardian)) +
   geom_boxplot()+
-  ggtitle("Weekend alcohol consumption as per guardian's")
+  ggtitle("Weekend alcohol consumption and guardian")
 
 ggplotly(plotWGPor) #Result - Draw plot
 
@@ -175,9 +178,15 @@ subplot(plotWGMath, plotWGPor, nrows = 2)  #Result - Draw plot
 
 plotWS <- ggplot(mathData, aes(sex, Walc, fill = sex))+
   geom_boxplot()+
-  ggtitle("Weekend Alcohol consumption as per Gender")
+  ggtitle("(Maths Class)Weekend Alcohol consumption as per Gender")
 
 ggplotly(plotWS)
+
+plotWJ <- ggplot(porData, aes(sex, Walc, fill = sex))+
+  geom_boxplot()+
+  ggtitle("(Por Class)Weekend Alcohol consumption as per Gender")
+
+ggplotly(plotWJ)
 
 #################################################
 # Plot # Weekend Alchol Consumption based on age of student
@@ -186,14 +195,14 @@ ggplotly(plotWS)
 #In Maths Class
 plotWAMath <- ggplot(mathData, aes(age, Walc, fill = Walc))+
   geom_boxplot(aes(fill=factor(age)))+
-  ggtitle("Weekend Alcohol consumption as per age")
+  ggtitle("(Maths Class)Weekend Alcohol consumption as per age")
 
 ggplotly(plotWAMath)
 
 #In Portuguese language class
 plotWAPor <- ggplot(porData, aes(age, Walc, fill = Walc))+
   geom_boxplot(aes(fill=factor(age)))+
-  ggtitle("Weekend Alcohol consumption as per age")
+  ggtitle("(Por Class)Weekend Alcohol consumption as per age")
 
 ggplotly(plotWAPor)
 
@@ -202,12 +211,12 @@ ggplotly(plotWAPor)
 #################################################
 
 #Maths Class
-barplot(table(mathData$Dalc), ylab='Number of Students', xlab='Weekend Alcohol',
-        main ='Workday Alcohol Consumption (Maths Class) ',
+barplot(table(mathData$Dalc), ylab='Number of Students', xlab='Workday Alcohol Consumption',
+        main ='(Maths Class) Workday Alcohol Consumption',
         col=rainbow(7))
 
-barplot(table(porData$Dalc), ylab='Number of Students', xlab='Weekend Alcohol',
-        main ='Workday Alcohol Consumption (Por Class) ',
+barplot(table(porData$Dalc), ylab='Number of Students', xlab='Workday Alcohol Consumption',
+        main ='(Por Class)  Workday Alcohol Consumption',
         col=rainbow(7))
 
 #################################################
@@ -255,7 +264,7 @@ p2 <- ggplot(porData, aes(x=Walc, y=absences, fill=Walc, color = Walc))+
 grid.arrange(p1,p2) #Plots Results comparision
 
 #################################################
-# Alcohol consumption per school and sex
+# Alcohol consumption in school based on gender
 #################################################
 
 # Weekend Comsumption (Maths Student)
@@ -265,7 +274,7 @@ w1 <- ggplot(mathData, aes(x=Walc, y=school, color=sex))+
   theme_bw()+
   xlab("Weekend alcohol consumption (Maths Class)")+
   ylab("School")+
-  ggtitle("Weekend alcohol consumption per school and sex")
+  ggtitle("Weekend alcohol consumption in school based on gender(Maths Class)")
 
 # Workday Comsumption (Maths Student)
 w2 <- ggplot(mathData, aes(x=Dalc, y=school, color=sex))+
@@ -274,7 +283,7 @@ w2 <- ggplot(mathData, aes(x=Dalc, y=school, color=sex))+
   theme_bw()+
   xlab("Workday alcohol consumption (Maths Class)")+
   ylab("School")+
-  ggtitle("Workday alcohol consumption per school and sex")
+  ggtitle("Workday alcohol consumption in school based on gender")
 
 grid.arrange(w1,w2)
 
@@ -285,7 +294,7 @@ w3 <- ggplot(porData, aes(x=Walc, y=school, color=sex))+
   theme_bw()+
   xlab("Weekend alcohol consumption (Portuguese Class)")+
   ylab("School")+
-  ggtitle("Weekend alcohol consumption per school and sex")
+  ggtitle("Weekend alcohol consumption per school and sex(Portuguese Class)")
 
 # Workday Comsumption (Portuguese Student)
 w4 <- ggplot(porData, aes(x=Dalc, y=school, color=sex))+
@@ -310,7 +319,7 @@ g1 <- ggplot(mathData, aes(x=Dalc, y=G1, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("First Grade")
+  ggtitle("First Grade(Maths Class)")
 
 g2 <- ggplot(mathData, aes(x=Dalc, y=G2, fill=Dalc))+
   geom_boxplot()+
@@ -318,7 +327,7 @@ g2 <- ggplot(mathData, aes(x=Dalc, y=G2, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("Second Grade")
+  ggtitle("Second Grade(Maths Class)")
 
 g3 <- ggplot(mathData, aes(x=Dalc, y=G3, fill=Dalc))+
   geom_boxplot()+
@@ -326,7 +335,7 @@ g3 <- ggplot(mathData, aes(x=Dalc, y=G3, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("Final Grade")
+  ggtitle("Final Grade(Maths Class)")
 
 grid.arrange(g1,g2,g3,ncol=3)
 
@@ -337,7 +346,7 @@ h1 <- ggplot(porData, aes(x=Dalc, y=G1, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("First Grade")
+  ggtitle("First Grade(Por Class)")
 
 h2 <- ggplot(porData, aes(x=Dalc, y=G2, fill=Dalc))+
   geom_boxplot()+
@@ -345,7 +354,7 @@ h2 <- ggplot(porData, aes(x=Dalc, y=G2, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("Second Grade")
+  ggtitle("Second Grade(Por Class)")
 
 h3 <- ggplot(porData, aes(x=Dalc, y=G3, fill=Dalc))+
   geom_boxplot()+
@@ -353,7 +362,7 @@ h3 <- ggplot(porData, aes(x=Dalc, y=G3, fill=Dalc))+
   theme(legend.position="none")+
   xlab("Alcohol consumption")+
   ylab("Grade")+
-  ggtitle("Final Grade")
+  ggtitle("Final Grade(Por Class)")
 
 grid.arrange(h1,h2,h3,ncol=3)
 
@@ -362,14 +371,14 @@ grid.arrange(h1,h2,h3,ncol=3)
 #################################################
 
 #Maths class
-hist(mathData$studytime, main = "Study Time (Maths Class)",
+hist(mathData$studytime, main = "Weekly Study Time (Maths Class)",
      xlab = "Weekly Studytime \nnumeric:1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours",
-     xlim=c(0,10))
+     xlim=c(0,5))
 
 #Portuguese class
-hist(porData$studytime, main = "Study Time (Portuguese Class)",
+hist(porData$studytime, main = "Weekly Study Time (Portuguese Class)",
      xlab = "Weekly Studytime \nnumeric:1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours",
-     xlim=c(0,10))
+     xlim=c(0,5))
 
 
 
@@ -397,7 +406,7 @@ s1 <- ggplot(mathData, aes(x=studytime, y=G1, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("First Grade")
+  ggtitle("First Grade(Maths Class)")
 
 s2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
   geom_boxplot(aes(fill=factor(studytime)))+
@@ -405,7 +414,7 @@ s2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("Second Grade")
+  ggtitle("Second Grade(Maths Class)")
 
 s3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
   geom_boxplot(aes(fill=factor(studytime)))+
@@ -413,7 +422,7 @@ s3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("Final Grade")
+  ggtitle("Final Grade(Maths Class)")
 
 grid.arrange(s1,s2,s3,ncol=3)
 
@@ -425,7 +434,7 @@ t1 <- ggplot(mathData, aes(x=studytime, y=G1, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("First Grade")
+  ggtitle("First Grade(Por Class)")
 
 t2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
   geom_boxplot(aes(fill=factor(studytime)))+
@@ -433,7 +442,7 @@ t2 <- ggplot(mathData, aes(x=studytime, y=G2, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("Second Grade")
+  ggtitle("Second Grade(Por Class)")
 
 t3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
   geom_boxplot(aes(fill=factor(studytime)))+
@@ -441,17 +450,17 @@ t3 <- ggplot(mathData, aes(x=studytime, y=G3, fill=studytime))+
   theme(legend.position="none")+
   xlab("Weekly Studytime (in hours)")+
   ylab("Grade")+
-  ggtitle("Final Grade")
+  ggtitle("Final Grade(Por Class)")
 
 grid.arrange(t1,t2,t3,ncol=3)
 
 #################################################
+#PART 2 of analysis
 #Analysis to be continued in combinedAnalysis.R file
+################################################
 
 
-
-
-
+#End of this File
 
 
 #################################################
