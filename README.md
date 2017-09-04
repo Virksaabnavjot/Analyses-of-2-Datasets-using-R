@@ -1,2 +1,3 @@
-# Analyses-of-2-Datasets-using-R
-A series of Analyses of two datasets utilising R programming language and some Python and programming environments - RStudio and PyCharm CE
+# DAUR (Data Analysis using R)
+
+Drawing useful conclusions from the datasets, drawing plots to understand the data which will help in making useful decisions.
